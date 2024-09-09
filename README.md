@@ -71,6 +71,8 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 			set_small_icon_name("ic_name_of_the_icon_that_you_generated").\
 			set_delay(my_delay_in_seconds)
 ```
+- In order to schedule repeating notifications, set the repeat interval value using `set_interval()``
+	- Note: minimum interval value allowed on the iOS platform is 60 seconds.
 - Schedule notification using the `NotificationScheduler` node:
 ```
 	$NotificationScheduler.schedule(
