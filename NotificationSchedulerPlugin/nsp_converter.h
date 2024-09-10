@@ -13,6 +13,7 @@
 
 // From Godot
 + (NSString*) toNsString:(String) godotString;
++ (NSNumber*) toNsNumber:(Variant) v;
 
 
 // To Godot

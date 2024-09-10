@@ -48,6 +48,7 @@ public:
 	Error schedule(Dictionary notificationData);
 	Error cancel(int notificationId);
 	int get_notification_id(int defaultValue);
+	void open_app_info_settings();
 
 	void handle_completion(NSString* notificationId);
 

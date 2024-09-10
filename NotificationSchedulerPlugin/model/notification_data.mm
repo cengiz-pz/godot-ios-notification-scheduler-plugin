@@ -22,13 +22,13 @@ const String NOTIFICATION_RESTART_APP_PROPERTY = "restart_app";
 
 - (instancetype) initWithDictionary:(Dictionary) notificationData {
 	if ((self = [super init])) {
-		self.notificationId = (NSInteger) notificationData[NOTIFICATION_ID_PROPERTY];
+		self.notificationId = [NSPConverter toNsNumber:notificationData[NOTIFICATION_ID_PROPERTY]].integerValue;
 		self.channelId = [NSPConverter toNsString:(String) notificationData[NOTIFICATION_CHANNEL_ID_PROPERTY]];
 		self.title = [NSPConverter toNsString:(String) notificationData[NOTIFICATION_TITLE_PROPERTY]];
 		self.content = [NSPConverter toNsString:(String) notificationData[NOTIFICATION_CONTENT_PROPERTY]];
 		self.smallIconName = [NSPConverter toNsString:(String) notificationData[NOTIFICATION_SMALL_ICON_NAME_PROPERTY]];
 		if (notificationData.has(NOTIFICATION_DELAY_PROPERTY)) {
-			self.delay = (NSInteger) notificationData[NOTIFICATION_DELAY_PROPERTY];
+			self.delay = [NSPConverter toNsNumber:notificationData[NOTIFICATION_DELAY_PROPERTY]].integerValue;;
 		}
 		else {
 			self.delay = 0;
@@ -37,7 +37,7 @@ const String NOTIFICATION_RESTART_APP_PROPERTY = "restart_app";
 			self.deeplink = [NSPConverter toNsString:(String) notificationData[NOTIFICATION_DEEPLINK_PROPERTY]];
 		}
 		if (notificationData.has(NOTIFICATION_INTERVAL_PROPERTY)) {
-			self.interval = (NSInteger) notificationData[NOTIFICATION_INTERVAL_PROPERTY];
+			self.interval = [NSPConverter toNsNumber:notificationData[NOTIFICATION_INTERVAL_PROPERTY]].integerValue;;
 		}
 		else {
 			self.interval = 0;

@@ -23,7 +23,7 @@ const String CHANNEL_IMPORTANCE_PROPERTY = "importance";
 			self.channelDescription = [NSPConverter toNsString:(String) channelData[CHANNEL_DESCRIPTION_PROPERTY]];
 		}
 		if (channelData.has(CHANNEL_IMPORTANCE_PROPERTY)) {
-			self.channelImportance = (NSInteger) channelData[CHANNEL_IMPORTANCE_PROPERTY];
+			self.channelImportance = [NSPConverter toNsNumber:channelData[CHANNEL_IMPORTANCE_PROPERTY]].integerValue;
 		}
 	}
 	return self;
