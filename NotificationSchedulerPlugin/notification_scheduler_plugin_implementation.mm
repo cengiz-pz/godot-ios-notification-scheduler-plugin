@@ -143,10 +143,15 @@ int NotificationSchedulerPlugin::get_notification_id(int defaultValue) {
 }
 
 void NotificationSchedulerPlugin::open_app_info_settings() {
-	// Create the URL that deep links to your app's custom settings.
-	NSURL *url = [[NSURL alloc] initWithString:UIApplicationOpenNotificationSettingsURLString];
-	// Ask the system to open that URL.
-	[[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+	if (@available(iOS 15.4, *)) {
+		// Create the URL that deep links to your app's custom settings.
+		NSURL *url = [[NSURL alloc] initWithString:UIApplicationOpenNotificationSettingsURLString];
+		// Ask the system to open that URL.
+		[[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+	}
+	else {
+		NSLog(@"NotificationSchedulerPlugin::open_app_info_settings: ERROR: iOS version 15.4 or greater is required!");
+	}
 }
 
 void NotificationSchedulerPlugin::handle_completion(NSString* notificationId) {
