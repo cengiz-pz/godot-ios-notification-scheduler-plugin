@@ -84,6 +84,13 @@ func get_notification_id(a_default_value: int = DEFAULT_NOTIFICATION_ID) -> int:
 	return __result
 
 
+func open_app_info_settings() -> void:
+	if _plugin_singleton:
+		_plugin_singleton.open_app_info_settings()
+	else:
+		printerr("%s singleton not initialized!" % PLUGIN_SINGLETON_NAME)
+
+
 func _on_notification_opened(a_notification_id: int) -> void:
 	emit_signal(NOTIFICATION_OPENED_SIGNAL_NAME, a_notification_id)
 

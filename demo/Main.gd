@@ -66,6 +66,10 @@ func _on_button_pressed() -> void:
 	notification_scheduler.schedule(__notification_data)
 
 
+func _on_open_settings_button_pressed() -> void:
+	notification_scheduler.open_app_info_settings()
+
+
 func _get_next_notification_id() -> int:
 	_notification_id += 1
 	return _notification_id

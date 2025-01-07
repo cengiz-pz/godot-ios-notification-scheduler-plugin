@@ -4,6 +4,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UserNotifications/UserNotifications.h>
+#import <UIKit/UIKit.h>
 
 #include "core/config/project_settings.h"
 
@@ -27,6 +28,7 @@ void NotificationSchedulerPlugin::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("schedule"), &NotificationSchedulerPlugin::schedule);
 	ClassDB::bind_method(D_METHOD("cancel"), &NotificationSchedulerPlugin::cancel);
 	ClassDB::bind_method(D_METHOD("get_notification_id"), &NotificationSchedulerPlugin::get_notification_id);
+	ClassDB::bind_method(D_METHOD("open_app_info_settings"), &NotificationSchedulerPlugin::open_app_info_settings);
 
 	ADD_SIGNAL(MethodInfo(NOTIFICATION_OPENED_SIGNAL, PropertyInfo(Variant::INT, "notification_id")));
 	ADD_SIGNAL(MethodInfo(NOTIFICATION_DISMISSED_SIGNAL, PropertyInfo(Variant::INT, "notification_id")));
@@ -131,12 +133,24 @@ Error NotificationSchedulerPlugin::cancel(int notificationId) {
 	return OK;
 }
 
-int NotificationSchedulerPlugin::get_notification_id(int defaultValue){
+int NotificationSchedulerPlugin::get_notification_id(int defaultValue) {
 	if (lastReceivedNotificationId) {
 		return lastReceivedNotificationId;
 	}
 	else {
 		return defaultValue;
+	}
+}
+
+void NotificationSchedulerPlugin::open_app_info_settings() {
+	if (@available(iOS 15.4, *)) {
+		// Create the URL that deep links to your app's custom settings.
+		NSURL *url = [[NSURL alloc] initWithString:UIApplicationOpenNotificationSettingsURLString];
+		// Ask the system to open that URL.
+		[[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+	}
+	else {
+		NSLog(@"NotificationSchedulerPlugin::open_app_info_settings: ERROR: iOS version 15.4 or greater is required!");
 	}
 }
 

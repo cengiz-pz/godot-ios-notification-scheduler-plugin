@@ -86,6 +86,7 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 ### ![](addon/icon.png?raw=true) Other Available Methods
 - `cancel(notification_id)`
 - `get_notification_id()` - alternative way to get the ID of the last opened notification.
+- `open_app_info_settings()` - open the notification settings screen for your app in iOS Settings app.
 
 ## ![](addon/icon.png?raw=true) Troubleshooting
 

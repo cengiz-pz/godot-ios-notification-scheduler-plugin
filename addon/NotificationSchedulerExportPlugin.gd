@@ -4,7 +4,6 @@ extends EditorPlugin
 const PLUGIN_NODE_TYPE_NAME = "NotificationScheduler"
 const PLUGIN_PARENT_NODE_TYPE = "Node"
 const PLUGIN_NAME: String = "NotificationSchedulerPlugin"
-const PLUGIN_VERSION: String = "1.0"
 
 var export_plugin: IosExportPlugin
 

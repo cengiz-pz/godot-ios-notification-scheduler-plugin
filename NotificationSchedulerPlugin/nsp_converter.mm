@@ -13,6 +13,18 @@
 	return [NSString stringWithUTF8String:godotString.utf8().get_data()];
 }
 
++ (NSNumber*) toNsNumber:(Variant) v {
+	if (v.get_type() == Variant::FLOAT) {
+		return [NSNumber numberWithDouble:(double) v];
+	} else if (v.get_type() == Variant::INT) {
+		return [NSNumber numberWithLongLong:(long)(int) v];
+	} else if (v.get_type() == Variant::BOOL) {
+		return [NSNumber numberWithBool:BOOL((bool) v)];
+	}
+	WARN_PRINT(String("toNsNumber::Could not convert unsupported type: '" + Variant::get_type_name(v.get_type()) + "'").utf8().get_data());
+	return NULL;
+}
+
 
 // TO GODOT
 
@@ -49,7 +61,7 @@
 				}
 				else if ([valueObject isKindOfClass:[NSDictionary class]]) {
 					NSDictionary* value = (NSDictionary*) valueObject;
-					dictionary[[key UTF8String]] = [GDPConverter nsDictionaryToGodotDictionary:value];
+					dictionary[[key UTF8String]] = [NSPConverter nsDictionaryToGodotDictionary:value];
 				}
 			}
 		}

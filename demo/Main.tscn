@@ -13,6 +13,7 @@ script = ExtResource("1_r6ksj")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -24,7 +25,6 @@ theme_override_constants/separation = 20
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 texture = ExtResource("2_7rmrj")
-expand_mode = 3
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer"]
@@ -84,6 +84,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Upon notification opened, restart app if running"
 
+[node name="OpenSettingsButton" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Open Settings"
+
 [node name="PermissionButton" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 disabled = true
@@ -102,6 +106,7 @@ script = ExtResource("3_guixi")
 
 [connection signal="value_changed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/HBoxContainer/DelayHSlider" to="." method="_on_delay_h_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer/IntervalHSlider" to="." method="_on_interval_h_slider_value_changed"]
+[connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/OpenSettingsButton" to="." method="_on_open_settings_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/PermissionButton" to="." method="_on_permission_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/SendButton" to="." method="_on_button_pressed"]
 [connection signal="notification_opened" from="NotificationScheduler" to="." method="_on_notification_scheduler_notification_opened"]
