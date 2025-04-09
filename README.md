@@ -105,6 +105,8 @@ Developed by [Cengiz](https://github.com/cengiz-pz)
 
 Original repository: [Godot iOS Notification Scheduler Plugin](https://github.com/cengiz-pz/godot-ios-notification-scheduler-plugin)
 
+Based on: [Godot iOS Plugin Template](https://github.com/cengiz-pz/godot-ios-plugin-template)
+
 <br/><br/><br/>
 
 ___
