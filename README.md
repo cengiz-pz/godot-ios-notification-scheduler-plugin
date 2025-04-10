@@ -1,3 +1,6 @@
+<p align="center">
+  <img width="256" height="256" src="demo/notification-scheduler.png">
+</p>
 
 ---
 # ![](addon/icon.png?raw=true) Notification Scheduler Plugin
@@ -103,9 +106,9 @@ Refer to Godot's [Troubleshooting Guide](https://docs.godotengine.org/en/stable/
 # ![](addon/icon.png?raw=true) Credits
 Developed by [Cengiz](https://github.com/cengiz-pz)
 
-Original repository: [Godot iOS Notification Scheduler Plugin](https://github.com/cengiz-pz/godot-ios-notification-scheduler-plugin)
-
 Based on: [Godot iOS Plugin Template](https://github.com/cengiz-pz/godot-ios-plugin-template)
+
+Original repository: [Godot iOS Notification Scheduler Plugin](https://github.com/cengiz-pz/godot-ios-notification-scheduler-plugin)
 
 <br/><br/><br/>
 
@@ -134,6 +137,23 @@ ___
 - Run `./script/build.sh -cgA <godot version>` to clean, redownload Godot, and rebuild
 - Run `./script/build.sh -ca` to clean and build without redownloading Godot
 - Run `./script/build.sh -h` for more information on the build script
+
+<br/>
+
+___
+
+## ![](addon/icon.png?raw=true) Git addon submodule
+
+
+### ![](addon/icon.png?raw=true) Creating
+
+- `git submodule add -b main --force --name addon https://github.com/cengiz-pz/godot-notification-scheduler-addon.git addon`
+
+
+### ![](addon/icon.png?raw=true) Updating
+
+- Remove `addon` directory
+- Run `git submodule update --remote --merge`
 
 <br/>
 
