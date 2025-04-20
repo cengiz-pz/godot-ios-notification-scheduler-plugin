@@ -32,6 +32,8 @@
 	[center addNotificationRequest:request withCompletionHandler:^(NSError* _Nullable error) {
 		if (error != nil) {
 			NSLog(@"ERROR: Unable to add notification request: %@", error.localizedDescription);
+		} else {
+			NSLog(@"DEBUG: add notification request completed successfully.");
 		}
 	}];
 
@@ -50,7 +52,9 @@
 		UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
 		[center addNotificationRequest:request withCompletionHandler:^(NSError* _Nullable error) {
 			if (error != nil) {
-				NSLog(@"ERROR: Unable to add notification request: %@", error.localizedDescription);
+				NSLog(@"ERROR: Unable to add repeating notification request: %@", error.localizedDescription);
+			} else {
+				NSLog(@"DEBUG: add repeating notification request completed successfully.");
 			}
 		}];
 	}

@@ -158,7 +158,7 @@ void NotificationSchedulerPlugin::handle_completion(NSString* notificationId) {
 	NSLog(@"NotificationSchedulerPlugin handle_completion for %@", notificationId);
 	NSPNotification* notification = [notifications objectForKey: notificationId];
 	if (notification == nil) {
-		NSLog(@"NotificationSchedulerPlugin::handle_completion: ERROR: Notification with ID '%@' not found!", notificationId);
+		NSLog(@"NotificationSchedulerPlugin::handle_completion: WARNING: Notification with ID '%@' not found in cache!", notificationId);
 	}
 	else {
 		if (notification.repeatInterval > 0) {

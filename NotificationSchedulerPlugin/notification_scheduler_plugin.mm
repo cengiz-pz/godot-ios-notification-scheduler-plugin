@@ -13,15 +13,11 @@
 NotificationSchedulerPlugin *plugin;
 
 void notification_scheduler_plugin_init() {
-	NSLog(@"init plugin");
-
 	plugin = memnew(NotificationSchedulerPlugin);
 	Engine::get_singleton()->add_singleton(Engine::Singleton("NotificationSchedulerPlugin", plugin));
 }
 
 void notification_scheduler_plugin_deinit() {
-	NSLog(@"deinit plugin");
-	
 	if (plugin) {
 	   memdelete(plugin);
    }

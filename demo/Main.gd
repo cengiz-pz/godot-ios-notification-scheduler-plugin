@@ -45,7 +45,6 @@ func _ready() -> void:
 		_print_to_screen("App does not have required notification permissions!")
 
 
-
 func _on_button_pressed() -> void:
 	var __notification_data = NotificationData.new()\
 			.set_id(_get_next_notification_id())\
@@ -113,3 +112,7 @@ func _on_notification_scheduler_permission_denied(permission_name: String) -> vo
 
 func _on_notification_scheduler_notification_opened(notification_id: int) -> void:
 	_print_to_screen("Notification %d opened" % notification_id)
+
+
+func _on_notification_scheduler_notification_dismissed(notification_id: int) -> void:
+	_print_to_screen("Notification %d dismissed" % notification_id)

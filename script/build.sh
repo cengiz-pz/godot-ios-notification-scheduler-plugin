@@ -283,6 +283,11 @@ function create_zip_archive()
 	then
 		mkdir -p $tmp_directory/addons/$PLUGIN_NAME
 		cp -r $addon_directory/* $tmp_directory/addons/$PLUGIN_NAME
+		sed -i '' -e "s/@pluginName@/$PLUGIN_NAME/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
+		sed -i '' -e "s/@pluginVersion@/$PLUGIN_VERSION/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
+		sed -i '' -e "s/@pluginNodeName@/$PLUGIN_NODE_TYPE/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
+		sed -i '' -e "s/@pluginDependencies@/$PLUGIN_DEPENDENCIES/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
+		sed -i '' -e "s/@targetOs@/$TARGET_OS/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
 	fi
 
 	mkdir -p $tmp_directory/ios/framework
