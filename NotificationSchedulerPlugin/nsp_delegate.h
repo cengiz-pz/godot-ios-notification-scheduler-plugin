@@ -10,6 +10,13 @@
 
 @interface NSPDelegate : NSObject<UNUserNotificationCenterDelegate>
 
+@property UNAuthorizationStatus authorizationStatus;
+
+@property (nonatomic, retain) NSMutableArray* dismissedNotificationsAtStartup;
+@property (nonatomic, retain) NSMutableArray* openedNotificationsAtStartup;
+
++ (instancetype) shared;
+
 // Asks the delegate to process the user’s response to a delivered notification.
 - (void) userNotificationCenter:(UNUserNotificationCenter*) center
             didReceiveNotificationResponse:(UNNotificationResponse*) response
