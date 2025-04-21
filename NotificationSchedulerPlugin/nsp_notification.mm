@@ -37,6 +37,16 @@
 		}
 	}];
 
+	if (notificationData.badgeCount != nil) {
+		[center setBadgeCount: [notificationData.badgeCount integerValue] withCompletionHandler:^(NSError* _Nullable error) {
+			if (error != nil) {
+				NSLog(@"ERROR: Unable to set badge count: %@", error.localizedDescription);
+			} else {
+				NSLog(@"DEBUG: badge count has been successfully set to %@.", notificationData.badgeCount);
+			}
+		}];
+	}
+
 	self.repeatInterval = notificationData.interval;
 }
 

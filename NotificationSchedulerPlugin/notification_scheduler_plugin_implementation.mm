@@ -29,6 +29,7 @@ void NotificationSchedulerPlugin::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("create_notification_channel"), &NotificationSchedulerPlugin::create_notification_channel);
 	ClassDB::bind_method(D_METHOD("schedule"), &NotificationSchedulerPlugin::schedule);
 	ClassDB::bind_method(D_METHOD("cancel"), &NotificationSchedulerPlugin::cancel);
+	ClassDB::bind_method(D_METHOD("set_badge_count"), &NotificationSchedulerPlugin::set_badge_count);
 	ClassDB::bind_method(D_METHOD("get_notification_id"), &NotificationSchedulerPlugin::get_notification_id);
 	ClassDB::bind_method(D_METHOD("open_app_info_settings"), &NotificationSchedulerPlugin::open_app_info_settings);
 
@@ -165,6 +166,19 @@ Error NotificationSchedulerPlugin::cancel(int notificationId) {
 	}
 
 	return OK;
+}
+
+void NotificationSchedulerPlugin::set_badge_count(int badgeCount) {
+	NSLog(@"NotificationSchedulerPlugin set_badge_count with '%d'", badgeCount);
+
+	UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
+	[center setBadgeCount: (NSInteger) badgeCount withCompletionHandler:^(NSError* _Nullable error) {
+		if (error != nil) {
+			NSLog(@"ERROR: Unable to set badge count: %@", error.localizedDescription);
+		} else {
+			NSLog(@"DEBUG: badge count has been successfully set to %d.", badgeCount);
+		}
+	}];
 }
 
 int NotificationSchedulerPlugin::get_notification_id(int defaultValue) {

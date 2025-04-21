@@ -81,7 +81,6 @@
 	dictionary["path"] = [url.path UTF8String];
 	dictionary["pathExtension"] = [url.pathExtension UTF8String];
 	dictionary["pathComponents"] = url.pathComponents;
-	dictionary["parameterString"] = [url.parameterString UTF8String];
 	dictionary["query"] = [url.query UTF8String];
 	dictionary["fragment"] = [url.fragment UTF8String];
 

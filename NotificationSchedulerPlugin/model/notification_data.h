@@ -18,6 +18,7 @@ extern const String NOTIFICATION_SMALL_ICON_NAME_PROPERTY;
 extern const String NOTIFICATION_DELAY_PROPERTY;
 extern const String NOTIFICATION_DEEPLINK_PROPERTY;
 extern const String NOTIFICATION_INTERVAL_PROPERTY;
+extern const String NOTIFICATION_BADGE_COUNT_PROPERTY;
 extern const String NOTIFICATION_RESTART_APP_PROPERTY;
 
 
@@ -30,6 +31,7 @@ extern const String NOTIFICATION_RESTART_APP_PROPERTY;
 @property (nonatomic, strong) NSString* smallIconName;
 @property (nonatomic) NSInteger delay;
 @property (nonatomic, strong) NSString* deeplink;
+@property (nonatomic, strong) NSNumber* badgeCount;
 @property (nonatomic) NSInteger interval;
 @property (nonatomic) BOOL restartApp;
 

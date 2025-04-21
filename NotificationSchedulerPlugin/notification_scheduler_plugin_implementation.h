@@ -49,6 +49,7 @@ public:
 
 	Error schedule(Dictionary notificationData);
 	Error cancel(int notificationId);
+	void set_badge_count(int badgeCount);
 	int get_notification_id(int defaultValue);
 	void open_app_info_settings();
 

@@ -64,13 +64,13 @@ architecture_directory = ''
 if env['simulator']:
 	architecture_directory = 'ios-arm64_x86_64-simulator'
 	sdk_name = 'iphonesimulator'
-	env.Append(CCFLAGS=['-mios-simulator-version-min=10.0'])
-	env.Append(LINKFLAGS=["-mios-simulator-version-min=10.0"])
+	env.Append(CCFLAGS=['-mios-simulator-version-min=16.0'])
+	env.Append(LINKFLAGS=["-mios-simulator-version-min=16.0"])
 else:
 	architecture_directory = 'ios-arm64'
 	sdk_name = 'iphoneos'
-	env.Append(CCFLAGS=['-miphoneos-version-min=10.0'])
-	env.Append(LINKFLAGS=["-miphoneos-version-min=10.0"])
+	env.Append(CCFLAGS=['-miphoneos-version-min=16.0'])
+	env.Append(LINKFLAGS=["-miphoneos-version-min=16.0"])
 
 try:
 	sdk_path = decode_utf8(subprocess.check_output(['xcrun', '--sdk', sdk_name, '--show-sdk-path']).strip())

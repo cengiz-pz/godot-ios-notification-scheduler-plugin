@@ -15,6 +15,7 @@ const String NOTIFICATION_SMALL_ICON_NAME_PROPERTY = "small_icon_name";
 const String NOTIFICATION_DELAY_PROPERTY = "delay";
 const String NOTIFICATION_DEEPLINK_PROPERTY = "deeplink";
 const String NOTIFICATION_INTERVAL_PROPERTY = "interval";
+const String NOTIFICATION_BADGE_COUNT_PROPERTY = "badge_count";
 const String NOTIFICATION_RESTART_APP_PROPERTY = "restart_app";
 
 
@@ -41,6 +42,12 @@ const String NOTIFICATION_RESTART_APP_PROPERTY = "restart_app";
 		}
 		else {
 			self.interval = 0;
+		}
+		if (notificationData.has(NOTIFICATION_BADGE_COUNT_PROPERTY)) {
+			self.badgeCount = [NSPConverter toNsNumber:notificationData[NOTIFICATION_BADGE_COUNT_PROPERTY]];
+		}
+		else {
+			self.badgeCount = nil;
 		}
 		if (notificationData.has(NOTIFICATION_RESTART_APP_PROPERTY)) {
 			self.restartApp = YES;

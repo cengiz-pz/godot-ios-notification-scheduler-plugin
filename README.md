@@ -88,7 +88,8 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 	- _The [Deeplink Plugin](https://github.com/cengiz-pz/godot-ios-deeplink-plugin) can then be used to process the URI data._
 
 ### ![](addon/icon.png?raw=true) Other Available Methods
-- `cancel(notification_id)`
+- `cancel(notification_id)` - cancel a notification before it is delivered.
+- `set_badge_count()` - set the number that appears on the app icon. (Set to 0 to remove.)
 - `get_notification_id()` - alternative way to get the ID of the last opened notification.
 - `open_app_info_settings()` - open the notification settings screen for your app in iOS Settings app.
 
