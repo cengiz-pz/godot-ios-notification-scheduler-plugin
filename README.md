@@ -41,6 +41,7 @@ Select your notification icon via the `iOS` section of `Project->Export...` menu
 
 ## ![](addon/icon.png?raw=true) Usage
 Add a `NotificationScheduler` node to your scene and follow the following steps:
+- Call `NotificationScheduler` node's `initialize()` method and await `initialization_completed` signal before continuing to use other plugin methods.
 - Register listeners for the following signals emitted from the `NotificationScheduler` node
 	- `notification_opened` - when user taps notification item
 	- `permission_granted`

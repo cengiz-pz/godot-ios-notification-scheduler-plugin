@@ -10,7 +10,6 @@ PLUGIN_NAME="${PLUGIN_NODE_TYPE}Plugin"
 PLUGIN_VERSION=''
 PLUGIN_VERSION=''
 PLUGIN_DEPENDENCIES=""
-TARGET_OS="ios"
 SUPPORTED_GODOT_VERSIONS=("4.2" "4.3" "4.4.1" "4.5")
 BUILD_TIMEOUT=40	# increase this value using -t option if device is not able to generate all headers before godot build is killed
 
@@ -287,7 +286,6 @@ function create_zip_archive()
 		sed -i '' -e "s/@pluginVersion@/$PLUGIN_VERSION/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
 		sed -i '' -e "s/@pluginNodeName@/$PLUGIN_NODE_TYPE/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
 		sed -i '' -e "s/@pluginDependencies@/$PLUGIN_DEPENDENCIES/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
-		sed -i '' -e "s/@targetOs@/$TARGET_OS/g" $tmp_directory/addons/$PLUGIN_NAME/*.{gd,cfg}
 	fi
 
 	mkdir -p $tmp_directory/ios/framework
