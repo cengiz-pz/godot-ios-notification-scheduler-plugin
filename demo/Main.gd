@@ -25,25 +25,15 @@ const NOTIFICATION_ICON_NAME: String = "ic_demo_notification"
 @onready var _interval_value_label: Label = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/IntervalHBoxContainer/ValueLabel as Label
 @onready var _permission_button: Button = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/PermissionButton as Button
 @onready var _restart_checkbox: CheckBox = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/RestartCheckBox as CheckBox
+@onready var _badge_count_checkbox: CheckBox = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeCountHBoxContainer/CheckBox as CheckBox
+@onready var _badge_count_slider: HSlider = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeCountHBoxContainer/BadgeCountHSlider as HSlider
+@onready var _badge_count_value_label: Label = $CanvasLayer/CenterContainer/VBoxContainer/VBoxContainer/BadgeCountHBoxContainer/ValueLabel as Label
 
 var _notification_id: int = 0
 
 
 func _ready() -> void:
-	_delay_value_label.text = str(int(_delay_slider.value))
-	_interval_value_label.text = str(int(_interval_slider.value))
-
-	if notification_scheduler.has_post_notifications_permission():
-		notification_scheduler.create_notification_channel(
-			NotificationChannel.new()
-					.set_id(channel_id)
-					.set_name(channel_name)
-					.set_description(channel_description)
-					.set_importance(channel_importance))
-	else:
-		_permission_button.disabled = false
-		_print_to_screen("App does not have required notification permissions!")
-
+	notification_scheduler.initialize()
 
 
 func _on_button_pressed() -> void:
@@ -60,6 +50,9 @@ func _on_button_pressed() -> void:
 
 	if _restart_checkbox.button_pressed:
 		__notification_data.set_restart_app_option()
+
+	if _badge_count_checkbox.button_pressed:
+		__notification_data.set_badge_count(_badge_count_slider.value)
 
 	_print_to_screen("Scheduling notification with a delay of %d seconds" % int(_delay_slider.value))
 
@@ -91,9 +84,29 @@ func _on_interval_h_slider_value_changed(value: float) -> void:
 	_interval_value_label.text = str(int(value))
 
 
+func _on_badge_count_h_slider_value_changed(value: float) -> void:
+	_badge_count_value_label.text = str(int(value))
+
+
 func _on_permission_button_pressed() -> void:
 	_permission_button.disabled = true
 	notification_scheduler.request_post_notifications_permission()
+
+
+func _on_notification_scheduler_initialization_completed() -> void:
+	_delay_value_label.text = str(int(_delay_slider.value))
+	_interval_value_label.text = str(int(_interval_slider.value))
+
+	if notification_scheduler.has_post_notifications_permission():
+		notification_scheduler.create_notification_channel(
+			NotificationChannel.new()
+					.set_id(channel_id)
+					.set_name(channel_name)
+					.set_description(channel_description)
+					.set_importance(channel_importance))
+	else:
+		_permission_button.disabled = false
+		_print_to_screen("App does not have required notification permissions!")
 
 
 func _on_notification_scheduler_permission_granted(permission_name: String) -> void:
@@ -113,3 +126,9 @@ func _on_notification_scheduler_permission_denied(permission_name: String) -> vo
 
 func _on_notification_scheduler_notification_opened(notification_id: int) -> void:
 	_print_to_screen("Notification %d opened" % notification_id)
+	notification_scheduler.set_badge_count(0)
+
+
+func _on_notification_scheduler_notification_dismissed(notification_id: int) -> void:
+	_print_to_screen("Notification %d dismissed" % notification_id)
+	notification_scheduler.set_badge_count(0)

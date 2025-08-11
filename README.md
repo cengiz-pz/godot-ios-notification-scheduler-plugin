@@ -46,6 +46,7 @@ Select your notification icon via the `iOS` section of `Project->Export...` menu
 
 ## ![](addon/icon.png?raw=true) Usage
 Add a `NotificationScheduler` node to your scene and follow the following steps:
+- Call `NotificationScheduler` node's `initialize()` method and await `initialization_completed` signal before continuing to use other plugin methods.
 - Register listeners for the following signals emitted from the `NotificationScheduler` node
 	- `notification_opened` - when user taps notification item
 	- `permission_granted`
@@ -92,7 +93,8 @@ Add a `NotificationScheduler` node to your scene and follow the following steps:
 	- _The [Deeplink Plugin](https://github.com/cengiz-pz/godot-ios-deeplink-plugin) can then be used to process the URI data._
 
 ### ![](addon/icon.png?raw=true) Other Available Methods
-- `cancel(notification_id)`
+- `cancel(notification_id)` - cancel a notification before it is delivered.
+- `set_badge_count()` - set the number that appears on the app icon. (Set to 0 to remove.)
 - `get_notification_id()` - alternative way to get the ID of the last opened notification.
 - `open_app_info_settings()` - open the notification settings screen for your app in iOS Settings app.
 
@@ -141,7 +143,17 @@ ___
 - Run `./script/build.sh -A <godot version>` initially to run a full build
 - Run `./script/build.sh -cgA <godot version>` to clean, redownload Godot, and rebuild
 - Run `./script/build.sh -ca` to clean and build without redownloading Godot
+- Run `./script/build.sh -cb -z4.0` to clean and build plugin without redownloading Godot and package in a zip archive as version 4.0
 - Run `./script/build.sh -h` for more information on the build script
+
+<br/>
+
+___
+
+## ![](addon/icon.png?raw=true) Install Script
+
+- Run `./script/install.sh -t <target directory> -z <path to zip file>` install plugin to a Godot project.
+- Example `./script/install.sh -t demo -z bin/release/NotificationSchedulerPlugin-v4.0.zip` to install to demo app.
 
 <br/>
 

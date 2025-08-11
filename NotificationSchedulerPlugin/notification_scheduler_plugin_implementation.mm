@@ -13,6 +13,7 @@
 #import "channel_data.h"
 
 
+String const INITIALIZATION_COMPLETED_SIGNAL = "initialization_completed";
 String const NOTIFICATION_OPENED_SIGNAL = "notification_opened";
 String const NOTIFICATION_DISMISSED_SIGNAL = "notification_dismissed";
 String const PERMISSION_GRANTED_SIGNAL = "permission_granted";
@@ -22,18 +23,52 @@ NotificationSchedulerPlugin* NotificationSchedulerPlugin::instance = NULL;
 
 
 void NotificationSchedulerPlugin::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("initialize"), &NotificationSchedulerPlugin::initialize);
 	ClassDB::bind_method(D_METHOD("has_post_notifications_permission"), &NotificationSchedulerPlugin::has_post_notifications_permission);
 	ClassDB::bind_method(D_METHOD("request_post_notifications_permission"), &NotificationSchedulerPlugin::request_post_notifications_permission);
 	ClassDB::bind_method(D_METHOD("create_notification_channel"), &NotificationSchedulerPlugin::create_notification_channel);
 	ClassDB::bind_method(D_METHOD("schedule"), &NotificationSchedulerPlugin::schedule);
 	ClassDB::bind_method(D_METHOD("cancel"), &NotificationSchedulerPlugin::cancel);
+	ClassDB::bind_method(D_METHOD("set_badge_count"), &NotificationSchedulerPlugin::set_badge_count);
 	ClassDB::bind_method(D_METHOD("get_notification_id"), &NotificationSchedulerPlugin::get_notification_id);
 	ClassDB::bind_method(D_METHOD("open_app_info_settings"), &NotificationSchedulerPlugin::open_app_info_settings);
 
+	ADD_SIGNAL(MethodInfo(INITIALIZATION_COMPLETED_SIGNAL));
 	ADD_SIGNAL(MethodInfo(NOTIFICATION_OPENED_SIGNAL, PropertyInfo(Variant::INT, "notification_id")));
 	ADD_SIGNAL(MethodInfo(NOTIFICATION_DISMISSED_SIGNAL, PropertyInfo(Variant::INT, "notification_id")));
 	ADD_SIGNAL(MethodInfo(PERMISSION_GRANTED_SIGNAL, PropertyInfo(Variant::STRING, "permission_name")));
 	ADD_SIGNAL(MethodInfo(PERMISSION_DENIED_SIGNAL, PropertyInfo(Variant::STRING, "permission_name")));
+}
+
+void NotificationSchedulerPlugin::initialize() {
+	NSLog(@"NotificationSchedulerPlugin initialize");
+
+	delegate = [NSPDelegate shared];
+	notifications = [NSMutableDictionary dictionaryWithCapacity:10];
+
+	instance->emit_signal(INITIALIZATION_COMPLETED_SIGNAL);
+
+	// Check if app was started due to an action on a notification.
+	NSLog(@"NotificationSchedulerPlugin initialize found %lu dismissed notifications at startup.", [delegate.dismissedNotificationsAtStartup count]);
+	if ([delegate.dismissedNotificationsAtStartup count] > (NSUInteger) 0) {
+		for (int i = 0; i < [delegate.dismissedNotificationsAtStartup count]; i++) {
+			NSString* identifier = [delegate.dismissedNotificationsAtStartup objectAtIndex: i];
+			instance->emit_signal(NOTIFICATION_DISMISSED_SIGNAL, [identifier intValue]);
+			// instance->handle_completion(request.identifier); // local cache was removed after app shutdown
+		}
+	}
+	[delegate.dismissedNotificationsAtStartup removeAllObjects];
+
+	NSLog(@"NotificationSchedulerPlugin initialize found %lu opened notifications at startup.", [delegate.openedNotificationsAtStartup count]);
+	if ([delegate.openedNotificationsAtStartup count] > (NSUInteger) 0) {
+		for (int i = 0; i < [delegate.openedNotificationsAtStartup count]; i++) {
+			NSString* identifier = [delegate.openedNotificationsAtStartup objectAtIndex: i];
+			NSLog(@"NotificationSchedulerPlugin found notification identifier %@.", identifier); 
+			instance->emit_signal(NOTIFICATION_OPENED_SIGNAL, [identifier intValue]);
+			// instance->handle_completion(request.identifier); // local cache was removed after app shutdown
+		}
+	}
+	[delegate.openedNotificationsAtStartup removeAllObjects];
 }
 
 bool NotificationSchedulerPlugin::has_post_notifications_permission() {
@@ -41,7 +76,7 @@ bool NotificationSchedulerPlugin::has_post_notifications_permission() {
 
 	bool has_authorization = false;
 
-	switch(authorizationStatus) {
+	switch(delegate.authorizationStatus) {
 		case UNAuthorizationStatusAuthorized:
 		case UNAuthorizationStatusProvisional:
 		case UNAuthorizationStatusEphemeral:
@@ -70,11 +105,11 @@ Error NotificationSchedulerPlugin::request_post_notifications_permission() {
 		}
 		else {
 			if (granted) {
-				this->authorizationStatus = UNAuthorizationStatusAuthorized;
+				delegate.authorizationStatus = UNAuthorizationStatusAuthorized;
 				this->call_deferred("emit_signal", PERMISSION_GRANTED_SIGNAL, "");
 			}
 			else {
-				this->authorizationStatus = UNAuthorizationStatusDenied;
+				delegate.authorizationStatus = UNAuthorizationStatusDenied;
 				this->call_deferred("emit_signal", PERMISSION_DENIED_SIGNAL, "");
 			}
 		}
@@ -115,7 +150,7 @@ Error NotificationSchedulerPlugin::schedule(Dictionary dict) {
 }
 
 Error NotificationSchedulerPlugin::cancel(int notificationId) {
-	NSLog(@"NotificationSchedulerPlugin cancel");
+	NSLog(@"NotificationSchedulerPlugin cancel notification with id '%d'", notificationId);
 
 	NSString* key = [NSString stringWithFormat:@"%d",notificationId];
 	NSPNotification* notification = [notifications objectForKey: key];
@@ -131,6 +166,19 @@ Error NotificationSchedulerPlugin::cancel(int notificationId) {
 	}
 
 	return OK;
+}
+
+void NotificationSchedulerPlugin::set_badge_count(int badgeCount) {
+	NSLog(@"NotificationSchedulerPlugin set_badge_count with '%d'", badgeCount);
+
+	UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
+	[center setBadgeCount: (NSInteger) badgeCount withCompletionHandler:^(NSError* _Nullable error) {
+		if (error != nil) {
+			NSLog(@"ERROR: Unable to set badge count: %@", error.localizedDescription);
+		} else {
+			NSLog(@"DEBUG: badge count has been successfully set to %d.", badgeCount);
+		}
+	}];
 }
 
 int NotificationSchedulerPlugin::get_notification_id(int defaultValue) {
@@ -158,7 +206,7 @@ void NotificationSchedulerPlugin::handle_completion(NSString* notificationId) {
 	NSLog(@"NotificationSchedulerPlugin handle_completion for %@", notificationId);
 	NSPNotification* notification = [notifications objectForKey: notificationId];
 	if (notification == nil) {
-		NSLog(@"NotificationSchedulerPlugin::handle_completion: ERROR: Notification with ID '%@' not found!", notificationId);
+		NSLog(@"NotificationSchedulerPlugin::handle_completion: WARNING: Notification with ID '%@' not found in cache!", notificationId);
 	}
 	else {
 		if (notification.repeatInterval > 0) {
@@ -176,16 +224,6 @@ NotificationSchedulerPlugin::NotificationSchedulerPlugin() {
 	NSLog(@"NotificationSchedulerPlugin constructor");
 
 	ERR_FAIL_COND(instance != NULL);
-
-	delegate = [[NSPDelegate alloc] init];
-	UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
-	center.delegate = delegate;
-	[center getNotificationSettingsWithCompletionHandler: ^(UNNotificationSettings * settings) {
-		NSLog(@"NotificationSchedulerPlugin constructor - authorization status: %ld", (long) settings.authorizationStatus);
-		this->authorizationStatus = settings.authorizationStatus;
-	}];
-
-	notifications = [NSMutableDictionary dictionaryWithCapacity:10];
 	
 	instance = this;
 }

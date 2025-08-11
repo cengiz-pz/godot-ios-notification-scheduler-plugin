@@ -12,6 +12,7 @@
 #import "nsp_delegate.h"
 
 
+extern String const INITIALIZATION_COMPLETED_SIGNAL;
 extern String const NOTIFICATION_OPENED_SIGNAL;
 extern String const NOTIFICATION_DISMISSED_SIGNAL;
 extern String const PERMISSION_GRANTED_SIGNAL;
@@ -32,7 +33,6 @@ private:
 
 	int lastReceivedNotificationId;
 
-	UNAuthorizationStatus authorizationStatus;
 	NSPDelegate* delegate;
 	NSMutableDictionary<NSString*, NSPNotification*>* notifications;
 
@@ -40,6 +40,8 @@ private:
 	
 public:
 	
+	void initialize();
+
 	bool has_post_notifications_permission();
 	Error request_post_notifications_permission();
 
@@ -47,6 +49,7 @@ public:
 
 	Error schedule(Dictionary notificationData);
 	Error cancel(int notificationId);
+	void set_badge_count(int badgeCount);
 	int get_notification_id(int defaultValue);
 	void open_app_info_settings();
 

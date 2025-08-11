@@ -32,8 +32,20 @@
 	[center addNotificationRequest:request withCompletionHandler:^(NSError* _Nullable error) {
 		if (error != nil) {
 			NSLog(@"ERROR: Unable to add notification request: %@", error.localizedDescription);
+		} else {
+			NSLog(@"DEBUG: add notification request completed successfully.");
 		}
 	}];
+
+	if (notificationData.badgeCount != nil) {
+		[center setBadgeCount: [notificationData.badgeCount integerValue] withCompletionHandler:^(NSError* _Nullable error) {
+			if (error != nil) {
+				NSLog(@"ERROR: Unable to set badge count: %@", error.localizedDescription);
+			} else {
+				NSLog(@"DEBUG: badge count has been successfully set to %@.", notificationData.badgeCount);
+			}
+		}];
+	}
 
 	self.repeatInterval = notificationData.interval;
 }
@@ -50,7 +62,9 @@
 		UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
 		[center addNotificationRequest:request withCompletionHandler:^(NSError* _Nullable error) {
 			if (error != nil) {
-				NSLog(@"ERROR: Unable to add notification request: %@", error.localizedDescription);
+				NSLog(@"ERROR: Unable to add repeating notification request: %@", error.localizedDescription);
+			} else {
+				NSLog(@"DEBUG: add repeating notification request completed successfully.");
 			}
 		}];
 	}
